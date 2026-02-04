@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api/pdfs";
+const API_BASE_URL = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api/pdfs`
+  : "http://localhost:8080/api/pdfs";
 
 const pdfApi = {
   getAllPdfs: async () => {
