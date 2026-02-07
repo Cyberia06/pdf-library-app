@@ -27,8 +27,8 @@ WORKDIR /app
 # Copiar JAR desde build
 COPY --from=build /app/target/*.jar app.jar
 
-# Exponer puerto
-EXPOSE 8080
+# Exponer puerto dinámico
+EXPOSE ${PORT:-8080}
 
-# Comando de inicio
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Comando de inicio con puerto dinámico
+CMD ["sh", "-c", "java -Dserver.port=${PORT:-8080} -jar app.jar"]
