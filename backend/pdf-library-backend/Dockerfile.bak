@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk-alpine AS build
+FROM eclipse-temurin:17-jdk AS build
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ COPY .mvn .mvn
 RUN chmod +x mvnw
 
 # Descargar dependencias
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw dependency:go-offline -B
 
 # Copiar código fuente
 COPY src src
@@ -20,7 +20,7 @@ COPY src src
 RUN ./mvnw clean package -DskipTests
 
 # Etapa final
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
@@ -31,4 +31,4 @@ COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
 # Comando de inicio
-CMD java -Dserver.port=${PORT} -jar app.jar
+ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "app.jar"]
