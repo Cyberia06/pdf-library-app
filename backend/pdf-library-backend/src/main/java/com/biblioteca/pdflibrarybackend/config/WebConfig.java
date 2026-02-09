@@ -1,16 +1,19 @@
 package com.biblioteca.pdflibrarybackend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-/**
- * Configuración para permitir peticiones desde el frontend React
- */
+import java.util.Arrays;
+
 @Configuration
 public class WebConfig {
+    
+    @Value("${CORS_ORIGINS:http://localhost:5173}")
+    private String corsOrigins;
     
     @Bean
     public CorsFilter corsFilter() {
@@ -18,9 +21,13 @@ public class WebConfig {
         CorsConfiguration config = new CorsConfiguration();
         
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:5173");
-        config.addAllowedOrigin("http://localhost:5174");
-        config.addAllowedOrigin("http://localhost:3000");
+        
+        // Parsear los orígenes desde la variable de entorno
+        String[] origins = corsOrigins.split(",");
+        for (String origin : origins) {
+            config.addAllowedOrigin(origin.trim());
+        }
+        
         config.addAllowedHeader("*");
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
