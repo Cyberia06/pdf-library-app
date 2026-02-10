@@ -33,5 +33,5 @@ COPY Uploads /app/uploads
 # Exponer puerto
 EXPOSE 8080
 
-# Comando de inicio (sin script externo)
-CMD ["sh", "-c", "java -Dserver.port=${PORT} -jar app.jar"]
+# Usar ENTRYPOINT con formato exec
+ENTRYPOINT ["java", "-jar", "app.jar"]
