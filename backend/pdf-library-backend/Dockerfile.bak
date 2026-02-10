@@ -27,8 +27,15 @@ WORKDIR /app
 # Copiar JAR desde build
 COPY --from=build /app/target/*.jar app.jar
 
+# Copiar carpeta Uploads con los PDFs
+COPY Uploads /app/uploads
+
+# Copiar script de inicio
+COPY start.sh .
+RUN chmod +x start.sh
+
 # Exponer puerto
 EXPOSE 8080
 
 # Comando de inicio
-ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "app.jar"]
+CMD ["./start.sh"]
